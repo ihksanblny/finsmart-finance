@@ -35,7 +35,8 @@ export function useMarketValue() {
             grouped[row.job_title] = {
               title: row.job_title,
               levels: {},
-              sourceUrl: row.source_url
+              sourceUrl: row.source_url,
+              allSkills: []
             };
           }
           grouped[row.job_title].levels[row.experience_level] = {
@@ -44,6 +45,9 @@ export function useMarketValue() {
           };
           if (!grouped[row.job_title].sourceUrl && row.source_url) {
             grouped[row.job_title].sourceUrl = row.source_url;
+          }
+          if (row.skills && Array.isArray(row.skills)) {
+            grouped[row.job_title].allSkills.push(...row.skills);
           }
         });
 
@@ -59,6 +63,18 @@ export function useMarketValue() {
           const calculatedAvg = mid ? ((mid.min + mid.max) / 2) : (calculatedMin * 1.5);
           const calculatedMax = senior ? senior.max : (mid ? mid.max * 1.5 : calculatedAvg * 1.5);
 
+          // Calculate Top 4 Skills dynamically using ML frequency results
+          const skillCounts: Record<string, number> = {};
+          item.allSkills.forEach((skill: string) => {
+            skillCounts[skill] = (skillCounts[skill] || 0) + 1;
+          });
+          const topSkills = Object.entries(skillCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 4)
+            .map(entry => entry[0]);
+
+          const finalSkills = topSkills.length > 0 ? topSkills : generateSkills(title);
+
           return {
             id: title.toLowerCase().replace(/\s+/g, '-'),
             title: title,
@@ -66,7 +82,7 @@ export function useMarketValue() {
             salaryMin: calculatedMin,
             salaryAvg: calculatedAvg,
             salaryMax: calculatedMax,
-            skills: generateSkills(title),
+            skills: finalSkills,
             demand: 'Tinggi',
             sourceUrl: item.sourceUrl
           };

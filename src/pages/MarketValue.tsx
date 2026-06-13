@@ -161,7 +161,11 @@ export default function MarketValue() {
                   
                   <div className="mt-8 pt-6 border-t border-slate-100">
                     <div className="flex gap-4 items-start p-4 rounded-2xl bg-[#b5f164]/10 border border-[#b5f164]/40">
-                      <span className="text-2xl mt-1">🎯</span>
+                      <div className="w-10 h-10 rounded-full bg-[#b5f164] text-[#0e2917] flex items-center justify-center shrink-0 mt-1 shadow-sm border border-[#0e2917]/10">
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                      </div>
                       <div>
                         <h4 className="font-bold text-[#0e2917] text-sm mb-1">Pola Pikir Anti-Inflasi</h4>
                         <p className="text-sm text-[#0e2917]/80 leading-relaxed">
