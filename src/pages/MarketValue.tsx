@@ -1,65 +1,13 @@
 import React, { useState } from 'react';
 import FreeToolNav from '../components/FreeToolNav';
-
-// Static database for MVP
-const professionsDB = [
-  {
-    id: 'software-engineer',
-    title: 'Software Engineer',
-    category: 'Technology',
-    salaryMin: 8000000,
-    salaryAvg: 15000000,
-    salaryMax: 25000000,
-    skills: ['React / Vue.js', 'Node.js / Go', 'System Design & Architecture', 'Cloud Deployment (AWS/GCP)'],
-    demand: 'Sangat Tinggi'
-  },
-  {
-    id: 'data-analyst',
-    title: 'Data Analyst',
-    category: 'Data',
-    salaryMin: 7000000,
-    salaryAvg: 12000000,
-    salaryMax: 18000000,
-    skills: ['Python (Pandas, NumPy)', 'Advanced SQL', 'Data Visualization (Tableau/PowerBI)', 'A/B Testing'],
-    demand: 'Tinggi'
-  },
-  {
-    id: 'digital-marketer',
-    title: 'Digital Marketer',
-    category: 'Marketing',
-    salaryMin: 6000000,
-    salaryAvg: 10000000,
-    salaryMax: 15000000,
-    skills: ['Performance Marketing (FB/Google Ads)', 'SEO & SEM', 'Data Analytics', 'Copywriting'],
-    demand: 'Tinggi'
-  },
-  {
-    id: 'ui-ux-designer',
-    title: 'UI/UX Designer',
-    category: 'Design',
-    salaryMin: 6000000,
-    salaryAvg: 11000000,
-    salaryMax: 18000000,
-    skills: ['Figma / Prototyping', 'User Research', 'Design Systems', 'Interaction Design'],
-    demand: 'Sedang - Tinggi'
-  },
-  {
-    id: 'product-manager',
-    title: 'Product Manager',
-    category: 'Management',
-    salaryMin: 12000000,
-    salaryAvg: 20000000,
-    salaryMax: 35000000,
-    skills: ['Agile / Scrum', 'Data-Driven Decision Making', 'Stakeholder Management', 'Go-to-Market Strategy'],
-    demand: 'Sangat Tinggi'
-  }
-];
+import { useMarketValue, type MarketData } from '../hooks/useMarketValue';
 
 export default function MarketValue() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedRole, setSelectedRole] = useState<typeof professionsDB[0] | null>(null);
+  const [selectedRole, setSelectedRole] = useState<MarketData | null>(null);
+  const { professions, loading } = useMarketValue();
 
-  const filteredRoles = professionsDB.filter(role => 
+  const filteredRoles = professions.filter(role => 
     role.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -76,8 +24,14 @@ export default function MarketValue() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Sidebar / Search List */}
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
+            <p className="text-slate-500 font-medium">Mengambil data pasar terbaru...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Sidebar / Search List */}
           <div className="lg:col-span-4 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col h-[600px]">
             <h3 className="font-bold text-[#0e2917] mb-4">Cari Profesi</h3>
             <div className="relative mb-6">
@@ -133,7 +87,22 @@ export default function MarketValue() {
                         {selectedRole.category}
                       </span>
                       <h2 className="text-3xl font-black text-[#0e2917]">{selectedRole.title}</h2>
-                      <p className="text-slate-500 mt-2">Demand di Indonesia: <strong className="text-slate-700">{selectedRole.demand}</strong></p>
+                      <div className="flex items-center gap-4 mt-2">
+                        <p className="text-slate-500">Demand di Indonesia: <strong className="text-slate-700">{selectedRole.demand}</strong></p>
+                        {selectedRole.sourceUrl && (
+                          <a 
+                            href={selectedRole.sourceUrl} 
+                            target="_blank" 
+                            rel="noreferrer"
+                            className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg border border-blue-100 hover:bg-blue-100 transition flex items-center gap-1"
+                          >
+                            Lihat Sumber Asli
+                            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -218,7 +187,8 @@ export default function MarketValue() {
               </div>
             )}
           </div>
-        </div>
+          </div>
+        )}
       </main>
     </div>
   );
