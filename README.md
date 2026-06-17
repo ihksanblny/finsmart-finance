@@ -98,4 +98,4 @@ Proyek ini saat ini berada dalam tahap Minimum Viable Product (MVP).
 
 ---
 
-Dibuat dengan ❤️ untuk membantu generasi muda mencapai kebebasan finansial yang sebenarnya.
+Ihksan Balany
