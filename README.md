@@ -98,4 +98,3 @@ Proyek ini saat ini berada dalam tahap Minimum Viable Product (MVP).
 
 ---
 
-Ihksan Balany
