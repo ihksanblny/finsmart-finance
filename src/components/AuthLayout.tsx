@@ -37,7 +37,11 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
           <div className="bg-white/10 backdrop-blur-md border border-white/20 p-5 rounded-2xl shadow-2xl w-3/4 transform -rotate-2 hover:rotate-0 transition-transform duration-500">
              <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-3">
-                   <div className="w-10 h-10 rounded-full bg-[#b5f164] flex items-center justify-center shadow-inner">📈</div>
+                   <div className="w-10 h-10 rounded-full bg-[#b5f164] flex items-center justify-center shadow-inner">
+                      <svg className="w-5 h-5 text-[#0e2917]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                   </div>
                    <div>
                       <div className="text-sm font-bold text-white">Daya Beli Terjaga</div>
                       <div className="text-xs text-emerald-50/60">Tahun 2026</div>

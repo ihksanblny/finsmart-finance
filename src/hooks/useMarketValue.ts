@@ -1,5 +1,13 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { skillsTaxonomy } from '../data/skillsTaxonomy';
+
+export interface SkillMatrix {
+  name: string;
+  category: 'golden' | 'baseline';
+  subSkills: string[];
+  prerequisites?: string[];
+}
 
 export interface MarketData {
   id: string;
@@ -8,7 +16,7 @@ export interface MarketData {
   salaryMin: number;
   salaryAvg: number;
   salaryMax: number;
-  skills: string[];
+  skills: SkillMatrix[];
   demand: string;
   sourceUrl?: string;
 }
@@ -26,17 +34,16 @@ export function useMarketValue() {
 
         if (error) throw error;
         const rawData = data as any[];
-        
+
         // Process data to group by job_title
         const grouped: Record<string, any> = {};
-        
+
         rawData?.forEach(row => {
           if (!grouped[row.job_title]) {
             grouped[row.job_title] = {
               title: row.job_title,
               levels: {},
-              sourceUrl: row.source_url,
-              allSkills: []
+              sourceUrl: row.source_url
             };
           }
           grouped[row.job_title].levels[row.experience_level] = {
@@ -46,9 +53,6 @@ export function useMarketValue() {
           if (!grouped[row.job_title].sourceUrl && row.source_url) {
             grouped[row.job_title].sourceUrl = row.source_url;
           }
-          if (row.skills && Array.isArray(row.skills)) {
-            grouped[row.job_title].allSkills.push(...row.skills);
-          }
         });
 
         const formattedData: MarketData[] = Object.keys(grouped).map(title => {
@@ -56,27 +60,23 @@ export function useMarketValue() {
           const entry = item.levels['Entry Level'];
           const mid = item.levels['Mid Level'];
           const senior = item.levels['Senior Level'];
-          
+
           // Calculate realistic numbers based on available data
-          // Fallbacks used if some levels are missing
           const calculatedMin = entry ? entry.min : (mid ? mid.min * 0.7 : 5000000);
           const calculatedAvg = mid ? ((mid.min + mid.max) / 2) : (calculatedMin * 1.5);
           const calculatedMax = senior ? senior.max : (mid ? mid.max * 1.5 : calculatedAvg * 1.5);
 
-          // Calculate Top 4 Skills dynamically using ML frequency results
-          const skillCounts: Record<string, number> = {};
-          item.allSkills.forEach((skill: string) => {
-            skillCounts[skill] = (skillCounts[skill] || 0) + 1;
-          });
-          const topSkills = Object.entries(skillCounts)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 4)
-            .map(entry => entry[0]);
+          const id = title.toLowerCase().replace(/\s+/g, '-');
 
-          const finalSkills = topSkills.length > 0 ? topSkills : generateSkills(title);
+          // Fetch from Taxonomy
+          const taxonomy = skillsTaxonomy[id] || { goldenSkills: [], baselineSkills: [] };
+          const finalSkills: SkillMatrix[] = [
+            ...taxonomy.goldenSkills.map(s => ({ name: s.name, subSkills: s.subSkills, prerequisites: s.prerequisites, category: 'golden' as const })),
+            ...taxonomy.baselineSkills.map(s => ({ name: s.name, subSkills: s.subSkills, category: 'baseline' as const }))
+          ];
 
           return {
-            id: title.toLowerCase().replace(/\s+/g, '-'),
+            id,
             title: title,
             category: determineCategory(title),
             salaryMin: calculatedMin,
@@ -87,10 +87,10 @@ export function useMarketValue() {
             sourceUrl: item.sourceUrl
           };
         });
-        
+
         // Sort alphabetically
         formattedData.sort((a, b) => a.title.localeCompare(b.title));
-        
+
         setProfessions(formattedData);
       } catch (err) {
         console.error('Error fetching market value data:', err);
@@ -116,18 +116,4 @@ function determineCategory(title: string): string {
   if (t.includes('finance') || t.includes('account')) return 'Finance';
   if (t.includes('admin') || t.includes('entry')) return 'Administration';
   return 'General';
-}
-
-function generateSkills(title: string): string[] {
-  const category = determineCategory(title);
-  switch (category) {
-    case 'Technology': return ['System Architecture', 'Clean Code', 'Cloud Deployment', 'Problem Solving'];
-    case 'Data': return ['SQL / Python', 'Data Visualization', 'Statistical Analysis', 'Business Insight'];
-    case 'Design': return ['Prototyping', 'User Research', 'Design Systems', 'Usability Testing'];
-    case 'Management': return ['Agile/Scrum', 'Stakeholder Management', 'Strategic Planning', 'Leadership'];
-    case 'Marketing': return ['Performance Marketing', 'SEO/SEM', 'Data Analytics', 'Copywriting'];
-    case 'Finance': return ['Financial Modeling', 'Risk Management', 'Taxation', 'Corporate Finance'];
-    case 'Administration': return ['Data Organization', 'Office Tools (Excel/Word)', 'Time Management', 'Communication'];
-    default: return ['Communication', 'Critical Thinking', 'Adaptability', 'Teamwork'];
-  }
 }

@@ -41,7 +41,11 @@ export default function InflationSection() {
           <div className="relative z-10 w-full max-w-sm flex flex-col gap-6">
              <div className="bg-white p-4 rounded-2xl shadow-xl flex items-center justify-between transform -translate-x-4 transition-transform hover:scale-105 duration-300">
                 <div className="flex items-center gap-4">
-                   <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-lg shadow-inner">📉</div>
+                   <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center shadow-inner">
+                      <svg className="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
+                      </svg>
+                   </div>
                    <div>
                       <div className="text-sm font-bold text-slate-800">Daya Beli 2023</div>
                       <div className="text-xs text-slate-400">Turun drastis</div>
@@ -52,7 +56,11 @@ export default function InflationSection() {
              
              <div className="bg-white p-4 rounded-2xl shadow-xl flex items-center justify-between transform translate-x-8 transition-transform hover:scale-105 duration-300">
                 <div className="flex items-center gap-4">
-                   <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-lg shadow-inner">📈</div>
+                   <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shadow-inner">
+                      <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                   </div>
                    <div>
                       <div className="text-sm font-bold text-slate-800">Target Gaji 2024</div>
                       <div className="text-xs text-slate-400">Harus naik</div>
@@ -63,7 +71,11 @@ export default function InflationSection() {
              
              <div className="bg-white p-4 rounded-2xl shadow-xl flex items-center justify-between transform transition-transform hover:scale-105 duration-300">
                 <div className="flex items-center gap-4">
-                   <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-lg shadow-inner">⚠️</div>
+                   <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shadow-inner">
+                      <svg className="w-5 h-5 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                   </div>
                    <div>
                       <div className="text-sm font-bold text-slate-800">Beban Inflasi</div>
                       <div className="text-xs text-slate-400">Tercatat</div>
