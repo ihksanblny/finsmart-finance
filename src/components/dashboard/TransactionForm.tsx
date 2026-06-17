@@ -25,10 +25,16 @@ export default function TransactionForm({ onAddTransaction }: TransactionFormPro
   const [description, setDescription] = useState('');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
+  const formatRupiah = (value: string | number) => {
+    const numberString = value.toString().replace(/[^,\d]/g, '');
+    return numberString.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!amount || isNaN(Number(amount))) return;
-    onAddTransaction(type, amount, category, description);
+    const rawAmount = amount.replace(/\./g, '');
+    if (!rawAmount || isNaN(Number(rawAmount))) return;
+    onAddTransaction(type, rawAmount, category, description);
     
     // Clear form after successful submit
     setAmount('');
@@ -60,10 +66,10 @@ export default function TransactionForm({ onAddTransaction }: TransactionFormPro
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">Rp</span>
             <input 
-              type="number" 
+              type="text" 
               required
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => setAmount(formatRupiah(e.target.value))}
               className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-[#0e2917] focus:bg-white transition-all"
               placeholder="0"
             />

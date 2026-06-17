@@ -44,6 +44,39 @@ export type Database = {
         }
         Relationships: []
       }
+      job_salaries: {
+        Row: {
+          id: number
+          job_title: string | null
+          salary_min: number | null
+          salary_max: number | null
+          experience_level: string | null
+          source_url: string | null
+          created_at: string
+          skills: string[] | null
+        }
+        Insert: {
+          id?: number
+          job_title?: string | null
+          salary_min?: number | null
+          salary_max?: number | null
+          experience_level?: string | null
+          source_url?: string | null
+          created_at?: string
+          skills?: string[] | null
+        }
+        Update: {
+          id?: number
+          job_title?: string | null
+          salary_min?: number | null
+          salary_max?: number | null
+          experience_level?: string | null
+          source_url?: string | null
+          created_at?: string
+          skills?: string[] | null
+        }
+        Relationships: []
+      }
       transactions: {
         Row: {
           amount: number

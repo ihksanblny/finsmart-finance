@@ -7,6 +7,7 @@ type StatWidgetsProps = {
   dayaBeliStatus: { isHealthy: boolean; realPercent: number } | null;
   exchangeRate: number | null;
   exchangeRateDate: string;
+  inflationRate: number;
 };
 
 export default function StatWidgets({
@@ -16,6 +17,7 @@ export default function StatWidgets({
   dayaBeliStatus,
   exchangeRate,
   exchangeRateDate,
+  inflationRate,
 }: StatWidgetsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -52,8 +54,8 @@ export default function StatWidgets({
             </div>
             <p className="text-sm font-medium text-[#0e2917]/80 leading-snug">
               {dayaBeliStatus.isHealthy 
-                ? 'Pertumbuhan asetmu lebih tinggi dari rata-rata inflasi saat ini (5.5%).' 
-                : 'Gajimu termakan inflasi (5.5%). Daya belimu sebenarnya menyusut tahun ini.'}
+                ? `Pertumbuhan asetmu lebih tinggi dari rata-rata inflasi riil saat ini (${inflationRate.toFixed(1)}%).` 
+                : `Gajimu termakan inflasi riil (${inflationRate.toFixed(1)}%). Daya belimu sebenarnya menyusut tahun ini.`}
             </p>
           </div>
         </div>

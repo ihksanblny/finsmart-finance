@@ -7,11 +7,6 @@ export default function HeroSection() {
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         {/* Left Column */}
         <div className="flex flex-col justify-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 w-fit mb-8 text-sm">
-            <span className="text-[#b5f164] text-xs">▶</span>
-            <span className="text-white/90">Announcing FinSmart Beta 2.0 &rarr;</span>
-          </div>
-
           <h1 className="text-5xl md:text-7xl font-bold leading-[1.1] mb-6 tracking-tight">
             All In One App <br /> Finance for Your <br /> Life.
           </h1>

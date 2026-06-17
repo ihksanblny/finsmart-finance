@@ -16,9 +16,10 @@ export function useDashboardData() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Kurs State
+  // Kurs & Inflasi State
   const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const [exchangeRateDate, setExchangeRateDate] = useState<string>('');
+  const [inflationRate, setInflationRate] = useState<number>(5.5); // Default fallback
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -44,6 +45,20 @@ export function useDashboardData() {
         }
       })
       .catch(err => console.error("Error fetching exchange rate:", err));
+
+    // Fetch real-time Inflation Rate (World Bank API - Indonesia)
+    fetch('https://api.worldbank.org/v2/country/ID/indicator/FP.CPI.TOTL.ZG?format=json')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data[1] && Array.isArray(data[1])) {
+          // Find the latest non-null inflation value
+          const latestData = data[1].find((item: any) => item.value !== null);
+          if (latestData) {
+            setInflationRate(latestData.value);
+          }
+        }
+      })
+      .catch(err => console.error("Error fetching inflation rate:", err));
   }, []);
 
   const fetchTransactions = async (uid: string) => {
@@ -150,7 +165,7 @@ export function useDashboardData() {
   if (profile && profile.last_year_salary && profile.current_salary) {
      const last = profile.last_year_salary;
      const current = profile.current_salary;
-     const inflation = 0.055; // 5.5% as default
+     const inflation = inflationRate / 100; // Dinamis dari API
      const realSalary = current / (1 + inflation);
      const realIncrease = realSalary - last;
      
@@ -174,6 +189,7 @@ export function useDashboardData() {
     loading,
     exchangeRate,
     exchangeRateDate,
+    inflationRate,
     totalBalance,
     monthIncome,
     monthExpense,

@@ -10,6 +10,7 @@ export default function Dashboard() {
     loading,
     exchangeRate,
     exchangeRateDate,
+    inflationRate,
     totalBalance,
     monthIncome,
     monthExpense,
@@ -110,6 +111,7 @@ export default function Dashboard() {
           dayaBeliStatus={dayaBeliStatus}
           exchangeRate={exchangeRate}
           exchangeRateDate={exchangeRateDate}
+          inflationRate={inflationRate}
         />
 
         {/* Smart Expense Tracker & History Section */}
