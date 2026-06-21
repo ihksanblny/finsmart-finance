@@ -6,16 +6,14 @@ import InflationSection from '../components/landing/InflationSection';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0e2917] text-white overflow-hidden relative font-sans selection:bg-[#b5f164]/30">
+    <div className="min-h-screen bg-[#FDFDFC] text-zinc-900 overflow-hidden relative font-sans selection:bg-zinc-200">
       <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-6">
         <Navbar />
-
         <HeroSection />
       </div>
 
-      <FeaturesSection />
-
       <InflationSection />
+      <FeaturesSection />
 
       <Footer />
     </div>
