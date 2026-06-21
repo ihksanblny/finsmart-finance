@@ -1,15 +1,32 @@
 import DashboardNav from '../components/DashboardNav';
 import StatWidgets from '../components/dashboard/StatWidgets';
 import { useDashboardData } from '../hooks/useDashboardData';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 export default function Dashboard() {
   const {
     totalBalance,
     monthIncome,
     monthExpense,
-    dayaBeliStatus
+    dayaBeliStatus,
+    profile
   } = useDashboardData();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        supabase.from('profiles').select('onboarding_completed').eq('id', user.id).single()
+          .then(({ data }) => {
+            if (data && data.onboarding_completed === false) {
+              navigate('/onboarding');
+            }
+          });
+      }
+    });
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 font-sans selection:bg-zinc-200 flex">
@@ -23,10 +40,17 @@ export default function Dashboard() {
             <div className="xl:col-span-8 flex flex-col gap-8">
               <div className="mb-2">
                 <h1 className="text-3xl font-bold text-zinc-900 tracking-tight">Command Center</h1>
-                <p className="text-sm font-medium text-zinc-500 mt-2">Financial Health Snapshot</p>
+                <p className="text-sm font-medium text-zinc-500 mt-2">
+                   {profile?.current_profession ? (
+                      <>Overview finansial Anda sebagai <span className="font-bold text-zinc-900">{profile.current_profession}</span></>
+                   ) : (
+                      "Financial Health Snapshot"
+                   )}
+                </p>
               </div>
 
               <StatWidgets 
+                baseSalary={profile?.current_salary || 0}
                 totalBalance={totalBalance}
                 monthIncome={monthIncome}
                 monthExpense={monthExpense}

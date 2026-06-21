@@ -6,6 +6,8 @@ import Dashboard from './pages/Dashboard';
 import Ledger from './pages/Ledger';
 import RealIncome from './pages/RealIncome';
 import MarketValue from './pages/MarketValue';
+import Goals from './pages/Goals';
+import Onboarding from './pages/Onboarding';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -15,6 +17,14 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route 
+          path="/onboarding" 
+          element={
+            <ProtectedRoute>
+              <Onboarding />
+            </ProtectedRoute>
+          } 
+        />
         <Route 
           path="/dashboard" 
           element={
@@ -38,6 +48,14 @@ function App() {
         <Route 
           path="/market-value" 
           element={<MarketValue />} 
+        />
+        <Route 
+          path="/goals" 
+          element={
+            <ProtectedRoute>
+              <Goals />
+            </ProtectedRoute>
+          } 
         />
       </Routes>
     </Router>

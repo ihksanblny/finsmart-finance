@@ -12,7 +12,7 @@ type Transaction = {
 
 export function useDashboardData() {
   const [userId, setUserId] = useState<string | null>(null);
-  const [profile, setProfile] = useState<{current_salary: number, last_year_salary: number} | null>(null);
+  const [profile, setProfile] = useState<{current_profession?: string, current_salary: number, last_year_salary: number} | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -76,14 +76,15 @@ export function useDashboardData() {
       // Fetch Profile
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('current_salary, last_year_salary')
+        .select('current_salary, last_year_salary, current_profession')
         .eq('id', uid)
         .single();
         
-      if (profileData && profileData.current_salary && profileData.last_year_salary) {
+      if (profileData && profileData.current_salary) {
          setProfile({
+            current_profession: profileData.current_profession || undefined,
             current_salary: profileData.current_salary,
-            last_year_salary: profileData.last_year_salary
+            last_year_salary: profileData.last_year_salary || null
          });
       }
     } catch (error) {
@@ -194,6 +195,7 @@ export function useDashboardData() {
     monthIncome,
     monthExpense,
     dayaBeliStatus,
+    profile,
     handleAddTransaction,
     handleDeleteTransaction
   };

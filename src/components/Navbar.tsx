@@ -20,7 +20,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="flex items-center justify-between py-4">
+    <nav className="relative flex items-center justify-between py-4">
       <Link to="/" className="flex items-center gap-3">
         <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center">
           <div className="w-4 h-4 bg-white rounded-sm transform rotate-45"></div>
@@ -28,7 +28,7 @@ export default function Navbar() {
         <span className="font-black text-2xl tracking-tight text-zinc-900">FinSmart</span>
       </Link>
       
-      <div className="hidden md:flex gap-8 text-sm font-medium text-zinc-500">
+      <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-8 text-sm font-medium text-zinc-500">
         <Link to="/kalkulator" className="hover:text-zinc-900 transition-colors font-semibold">Kalkulator Inflasi</Link>
         <Link to="/market-value" className="hover:text-zinc-900 transition-colors font-semibold">Skill Benchmark</Link>
       </div>

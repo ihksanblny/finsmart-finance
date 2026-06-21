@@ -13,8 +13,6 @@ export default function Ledger() {
     handleDeleteTransaction
   } = useDashboardData();
 
-  const incomeTransactions = transactions.filter(t => t.type === 'income');
-  const expenseTransactions = transactions.filter(t => t.type === 'expense');
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 font-sans selection:bg-zinc-200 flex">
@@ -37,25 +35,14 @@ export default function Ledger() {
             </div>
 
             {/* History Data Area */}
-            <div className="xl:col-span-8 flex flex-col lg:flex-row gap-8">
-              <div className="w-full">
-                <TransactionHistory 
-                  title="Inflow (Pemasukan)"
-                  transactions={incomeTransactions}
-                  loading={loading}
-                  exchangeRate={exchangeRate}
-                  onDeleteTransaction={handleDeleteTransaction}
-                />
-              </div>
-              <div className="w-full">
-                <TransactionHistory 
-                  title="Outflow (Pengeluaran)"
-                  transactions={expenseTransactions}
-                  loading={loading}
-                  exchangeRate={exchangeRate}
-                  onDeleteTransaction={handleDeleteTransaction}
-                />
-              </div>
+            <div className="xl:col-span-8">
+              <TransactionHistory 
+                title="Transaction History"
+                transactions={transactions}
+                loading={loading}
+                exchangeRate={exchangeRate}
+                onDeleteTransaction={handleDeleteTransaction}
+              />
             </div>
 
           </div>

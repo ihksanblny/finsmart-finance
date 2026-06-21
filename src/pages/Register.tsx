@@ -34,7 +34,7 @@ export default function Register() {
       if (data.session === null) {
         setMessage('Registrasi berhasil! Silakan periksa kotak masuk (atau spam) email Anda untuk verifikasi.');
       } else {
-        navigate('/dashboard');
+        navigate('/onboarding');
       }
     } catch (err: any) {
       setError(err.message || 'Terjadi kesalahan saat mendaftar.');
@@ -48,7 +48,7 @@ export default function Register() {
       const { error: googleError } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`
+          redirectTo: `${window.location.origin}/onboarding`
         }
       });
       if (googleError) throw googleError;
