@@ -23,62 +23,95 @@ export default function DashboardNav() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <Link to="/dashboard" className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#0e2917] rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-[#b5f164] rounded-sm transform rotate-45"></div>
-            </div>
-            <span className="font-bold text-xl tracking-tight text-[#0e2917]">FinSmart</span>
-          </Link>
-          
-          <div className="hidden md:flex items-center gap-6">
-             <Link 
-               to="/" 
-               className="text-sm font-semibold text-slate-400 hover:text-[#0e2917] transition-colors flex items-center gap-1"
-               title="Kembali ke Beranda Utama"
-             >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                Home
-             </Link>
-             <div className="w-px h-4 bg-slate-200"></div>
-             <Link 
-               to="/dashboard" 
-               className={`text-sm font-semibold transition-colors ${isActive('/dashboard') ? 'text-[#0e2917]' : 'text-slate-400 hover:text-slate-600'}`}
-             >
-                Dashboard
-             </Link>
+    <aside className="w-64 fixed inset-y-0 left-0 bg-white border-r border-zinc-200 z-50 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+      {/* Logo Area */}
+      <div className="h-24 flex items-center px-8 border-b border-zinc-100 shrink-0">
+        <Link to="/dashboard" className="flex items-center gap-3">
+          <div className="w-8 h-8 bg-zinc-950 rounded-lg flex items-center justify-center">
+            <div className="w-4 h-4 bg-white rounded-sm transform rotate-45"></div>
           </div>
-        </div>
-
-        <div className="flex items-center gap-4 md:gap-6">
-          {userName ? (
-            <>
-              <div className="text-sm text-slate-500 hidden md:block">
-                Halo, <span className="text-[#0e2917] font-semibold">{userName}</span>
-              </div>
-              <button 
-                onClick={handleLogout} 
-                className="px-5 py-2 rounded-full border border-slate-200 text-sm font-medium text-slate-600 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors bg-white shadow-sm"
-              >
-                Keluar
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="px-5 py-2 text-sm font-medium text-slate-600 hover:text-[#0e2917] transition-colors">
-                Masuk
-              </Link>
-              <Link to="/register" className="px-5 py-2 rounded-full bg-[#0e2917] text-[#b5f164] text-sm font-medium hover:bg-[#163c23] transition-colors shadow-sm">
-                Daftar Gratis
-              </Link>
-            </>
-          )}
-        </div>
+          <span className="font-black text-xl tracking-tighter text-zinc-900">FINSMART</span>
+        </Link>
       </div>
-    </nav>
+
+      {/* Navigation Links */}
+      <div className="flex-1 py-8 px-4 flex flex-col gap-2 overflow-y-auto">
+        <div className="px-4 mb-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Menu Utama</div>
+        
+        <Link 
+          to="/dashboard" 
+          className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive('/dashboard') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'}`}
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+          Overview
+        </Link>
+        
+        <Link 
+          to="/ledger" 
+          className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive('/ledger') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'}`}
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+          Cashflow
+        </Link>
+
+        <div className="px-4 mt-8 mb-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Free Tools</div>
+
+        <Link 
+          to="/kalkulator" 
+          className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive('/kalkulator') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'}`}
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          Kalk. Inflasi
+        </Link>
+
+        <Link 
+          to="/market-value" 
+          className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive('/market-value') ? 'bg-zinc-100 text-zinc-900 shadow-sm' : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900'}`}
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Skill Benchmark
+        </Link>
+      </div>
+
+      {/* User Footer */}
+      <div className="p-6 border-t border-zinc-100 bg-zinc-50 mt-auto">
+        {userName ? (
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-zinc-200 border-2 border-white shadow-sm flex items-center justify-center text-zinc-600 font-bold uppercase">
+                {userName.charAt(0)}
+              </div>
+              <div className="overflow-hidden">
+                <div className="text-sm font-bold text-zinc-900 truncate">{userName}</div>
+                <div className="text-xs text-zinc-500">Active Session</div>
+              </div>
+            </div>
+            <button 
+              onClick={handleLogout} 
+              className="w-full py-2.5 rounded-xl border border-zinc-200 text-sm font-medium text-zinc-600 hover:bg-white hover:shadow-sm transition-all"
+            >
+              Log Out
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3">
+            <Link to="/login" className="w-full py-2.5 text-center rounded-xl bg-white border border-zinc-200 text-zinc-900 text-sm font-semibold hover:bg-zinc-50 transition-colors shadow-sm">
+              Masuk
+            </Link>
+            <Link to="/register" className="w-full py-2.5 text-center rounded-xl bg-zinc-900 text-white text-sm font-semibold hover:bg-zinc-800 transition-colors shadow-sm">
+              Daftar Gratis
+            </Link>
+          </div>
+        )}
+      </div>
+    </aside>
   );
 }

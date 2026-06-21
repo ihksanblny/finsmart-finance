@@ -15,51 +15,58 @@ export default function FreeToolNav() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#0e2917] rounded-lg flex items-center justify-center">
-              <div className="w-4 h-4 bg-[#b5f164] rounded-sm transform rotate-45"></div>
+    <div className="w-full pt-6 px-4 md:px-8 z-50 sticky top-0">
+      <nav className="max-w-5xl mx-auto bg-white/70 backdrop-blur-xl border border-zinc-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-2 md:px-4 h-16 flex items-center justify-between">
+        
+        {/* Left Section: Logo & Badge */}
+        <div className="flex items-center gap-6 pl-2">
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+              <div className="w-3.5 h-3.5 bg-white rounded-sm transform rotate-45"></div>
             </div>
-            <span className="font-bold text-xl tracking-tight text-[#0e2917] hidden sm:block">
-              FinSmart <span className="text-emerald-700 font-semibold text-xs ml-2 px-2.5 py-1 rounded-full bg-emerald-100/80 border border-emerald-200/50">Free Tools</span>
+            <span className="font-black text-xl tracking-tight text-zinc-900 hidden sm:flex items-center gap-3">
+              FinSmart
+              <span className="text-zinc-800 font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full bg-zinc-100 border border-zinc-200/80 shadow-sm">
+                Free Tools
+              </span>
             </span>
           </Link>
-          
-          <div className="hidden md:flex items-center gap-6">
-             <Link 
-               to="/kalkulator" 
-               className={`text-sm font-semibold transition-colors ${isActive('/kalkulator') ? 'text-[#0e2917]' : 'text-slate-500 hover:text-slate-800'}`}
-             >
-                Kalkulator Inflasi
-             </Link>
-             <Link 
-               to="/market-value" 
-               className={`text-sm font-semibold transition-colors ${isActive('/market-value') ? 'text-[#0e2917]' : 'text-slate-500 hover:text-slate-800'}`}
-             >
-                Benchmark Gaji
-             </Link>
-          </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        {/* Center Section: Navigation Links */}
+        <div className="hidden md:flex items-center p-1 bg-zinc-50/50 border border-zinc-100 rounded-full">
+           <Link 
+             to="/kalkulator" 
+             className={`text-sm font-bold transition-all px-5 py-2 rounded-full ${isActive('/kalkulator') ? 'bg-white text-zinc-900 shadow-sm border border-zinc-200/50' : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100/50'}`}
+           >
+              Kalkulator Inflasi
+           </Link>
+           <Link 
+             to="/market-value" 
+             className={`text-sm font-bold transition-all px-5 py-2 rounded-full ${isActive('/market-value') ? 'bg-white text-zinc-900 shadow-sm border border-zinc-200/50' : 'text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100/50'}`}
+           >
+              Benchmark Gaji
+           </Link>
+        </div>
+
+        {/* Right Section: CTAs */}
+        <div className="flex items-center gap-2 pr-1">
           {session ? (
-            <Link to="/dashboard" className="px-6 py-2.5 rounded-full bg-[#0e2917] text-[#b5f164] text-sm font-semibold hover:bg-[#153a21] transition-colors shadow-sm">
+            <Link to="/dashboard" className="px-6 py-2.5 rounded-full bg-zinc-900 text-white text-sm font-bold hover:bg-black transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
               Buka Dashboard
             </Link>
           ) : (
             <>
-              <Link to="/login" className="px-5 py-2 text-sm font-semibold text-slate-500 hover:text-[#0e2917] transition-colors hidden sm:block">
+              <Link to="/login" className="px-5 py-2 text-sm font-bold text-zinc-500 hover:text-zinc-900 transition-colors hidden sm:block">
                 Login
               </Link>
-              <Link to="/register" className="px-6 py-2.5 rounded-full bg-[#0e2917] text-[#b5f164] text-sm font-semibold hover:bg-[#153a21] transition-colors shadow-sm">
-                Daftar & Akses Tracker
+              <Link to="/register" className="px-6 py-2.5 rounded-full bg-zinc-900 text-white text-sm font-bold hover:bg-black transition-all shadow-md shadow-zinc-900/20 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
+                Akses Tracker
               </Link>
             </>
           )}
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }

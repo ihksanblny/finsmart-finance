@@ -42,59 +42,59 @@ export default function TransactionForm({ onAddTransaction }: TransactionFormPro
   };
 
   return (
-    <div className="lg:col-span-1 bg-white border border-slate-200 rounded-3xl p-6 shadow-xl shadow-slate-200/50 h-fit">
-      <h3 className="text-xl font-bold text-[#0e2917] mb-6">Catat Transaksi</h3>
+    <div className="lg:col-span-1 bg-white border border-zinc-200 rounded-[2rem] p-8 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] h-fit">
+      <h3 className="text-xl font-black text-zinc-900 tracking-tight mb-8">Record Ledger</h3>
       
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         {/* Tipe Transaksi */}
-        <div className="grid grid-cols-2 gap-2 bg-slate-50 p-1 rounded-xl border border-slate-100">
+        <div className="grid grid-cols-2 gap-2 bg-zinc-50 p-1.5 rounded-2xl border border-zinc-200">
           <button 
             type="button" 
             onClick={() => setType('expense')}
-            className={`py-2 rounded-lg text-sm font-semibold transition-all ${type === 'expense' ? 'bg-red-50 text-red-600 border border-red-100 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            className={`py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${type === 'expense' ? 'bg-zinc-900 text-white shadow-md' : 'text-zinc-400 hover:text-zinc-900'}`}
           >Pengeluaran</button>
           <button 
             type="button" 
             onClick={() => setType('income')}
-            className={`py-2 rounded-lg text-sm font-semibold transition-all ${type === 'income' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            className={`py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${type === 'income' ? 'bg-white text-zinc-900 border border-zinc-200 shadow-md' : 'text-zinc-400 hover:text-zinc-900'}`}
           >Pemasukan</button>
         </div>
 
         {/* Nominal */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Nominal (Rp)</label>
+        <div className="flex flex-col gap-2">
+          <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Nominal (Rp)</label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-semibold">Rp</span>
+            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-400 font-bold">Rp</span>
             <input 
               type="text" 
               required
               value={amount}
               onChange={(e) => setAmount(formatRupiah(e.target.value))}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-[#0e2917] focus:bg-white transition-all"
+              className="w-full pl-14 pr-5 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl text-zinc-900 font-black text-lg focus:outline-none focus:ring-4 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all placeholder:text-zinc-300"
               placeholder="0"
             />
           </div>
         </div>
 
         {/* Kategori */}
-        <div className="flex flex-col gap-1.5 relative">
-          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Kategori</label>
+        <div className="flex flex-col gap-2 relative">
+          <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Kategori</label>
           <div className="relative">
             <button
               type="button"
               onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-[#0e2917] focus:bg-white transition-all flex justify-between items-center"
+              className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl text-zinc-900 font-bold focus:outline-none focus:ring-4 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all flex justify-between items-center text-left"
             >
               {categories.find(c => c.id === category)?.label || 'Pilih Kategori'}
-              <svg className={`w-5 h-5 text-slate-400 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              <svg className={`w-5 h-5 text-zinc-400 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
             
             {isCategoryOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setIsCategoryOpen(false)}></div>
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl shadow-slate-200/50 z-20 overflow-hidden flex flex-col">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-zinc-200 rounded-2xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] z-20 overflow-hidden flex flex-col p-2">
                   {categories.map((c) => (
                       <button
                         key={c.id}
@@ -103,7 +103,7 @@ export default function TransactionForm({ onAddTransaction }: TransactionFormPro
                           setCategory(c.id);
                           setIsCategoryOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-3 text-sm font-semibold transition-colors ${category === c.id ? 'bg-[#0e2917] text-white' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-b border-slate-100 last:border-b-0'}`}
+                        className={`w-full text-left px-4 py-3 text-sm font-bold rounded-xl transition-colors ${category === c.id ? 'bg-zinc-900 text-white' : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'}`}
                       >
                         {c.label}
                       </button>
@@ -115,22 +115,22 @@ export default function TransactionForm({ onAddTransaction }: TransactionFormPro
         </div>
 
         {/* Catatan Tambahan */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Catatan (Opsional)</label>
+        <div className="flex flex-col gap-2">
+          <label className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Notes (Opsional)</label>
           <input 
             type="text" 
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#0e2917] focus:bg-white transition-all"
-            placeholder="Beli kopi, dll..."
+            className="w-full px-5 py-4 bg-zinc-50 border border-zinc-200 rounded-2xl text-zinc-900 font-bold focus:outline-none focus:ring-4 focus:ring-zinc-900/5 focus:border-zinc-900 transition-all placeholder:text-zinc-300"
+            placeholder="Referensi / Memo..."
           />
         </div>
 
         <button 
           type="submit" 
-          className="w-full py-3.5 mt-2 rounded-xl bg-[#0e2917] text-white font-bold text-lg hover:bg-[#0a1f11] transition-colors shadow-lg shadow-[#0e2917]/20"
+          className="w-full py-4 mt-4 rounded-2xl bg-zinc-950 text-white font-black text-sm uppercase tracking-widest hover:bg-zinc-800 transition-colors shadow-lg"
         >
-          Simpan Catatan
+          Execute
         </button>
       </form>
     </div>

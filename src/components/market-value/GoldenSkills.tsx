@@ -29,16 +29,16 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
             className="flex flex-col items-center relative w-[240px] min-h-[300px]"
           >
             {/* MAIN NODE DIAMOND */}
-            <div className={cn("flex flex-col items-center relative z-20 group transition-all duration-500", isLocked && "opacity-60 grayscale")}>
+            <div className={cn("flex flex-col items-center relative z-20 group transition-all duration-500", isLocked && "opacity-60")}>
               <motion.div 
                 layout
                 className={cn(
-                  "w-24 h-24 rotate-45 flex items-center justify-center border-2 transition-all duration-700 shadow-2xl relative z-10 backdrop-blur-xl",
+                  "w-20 h-20 rotate-45 flex items-center justify-center border-2 transition-all duration-700 shadow-sm relative z-10 bg-white",
                   isComplete 
-                    ? "bg-amber-500/10 border-amber-400/60 shadow-[0_0_40px_rgba(251,191,36,0.2)]" 
+                    ? "border-zinc-900 bg-zinc-900 shadow-[0_10px_20px_rgba(0,0,0,0.1)]" 
                     : isLocked
-                      ? "bg-[#0B1120] border-slate-700 shadow-none"
-                      : "bg-[#0B1120] border-amber-900/40 hover:border-amber-600/60 shadow-[0_0_15px_rgba(251,191,36,0.05)]"
+                      ? "border-zinc-200 bg-zinc-50 border-dashed"
+                      : "border-zinc-300 hover:border-zinc-900"
                 )}
               >
                 <div className="-rotate-45 flex flex-col items-center justify-center w-full h-full">
@@ -50,7 +50,7 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
                          animate={{ opacity: 1, scale: 1 }} 
                          exit={{ opacity: 0, scale: 0.5 }}
                        >
-                         <Lock className="w-6 h-6 text-slate-500" strokeWidth={2.5} />
+                         <Lock className="w-5 h-5 text-zinc-300" strokeWidth={2.5} />
                        </motion.div>
                      ) : isComplete ? (
                        <motion.div 
@@ -60,7 +60,7 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
                          exit={{ opacity: 0, scale: 0.5 }}
                          transition={{ type: "spring" }}
                        >
-                         <Flame className="w-10 h-10 text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.8)]" />
+                         <Flame className="w-8 h-8 text-white" />
                        </motion.div>
                      ) : (
                        <motion.div 
@@ -69,8 +69,8 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
                          animate={{ opacity: 1, scale: 1 }} 
                          exit={{ opacity: 0, scale: 0.5 }}
                        >
-                         <span className="text-amber-600/80 text-xl font-medium tracking-tight">
-                           <strong className="text-amber-500">{ownedSubCount}</strong>/{totalSubs}
+                         <span className="text-zinc-900 text-lg font-black tracking-tight">
+                           {ownedSubCount}<span className="text-zinc-400 text-sm font-bold">/{totalSubs}</span>
                          </span>
                        </motion.div>
                      )}
@@ -79,12 +79,12 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
               </motion.div>
               
               <h4 className={cn(
-                "text-center mt-8 font-black text-[13px] uppercase tracking-[0.15em] transition-colors duration-300",
+                "text-center mt-6 font-black text-[11px] uppercase tracking-[0.15em] transition-colors duration-300",
                 isComplete 
-                  ? "text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]" 
+                  ? "text-zinc-900" 
                   : isLocked
-                    ? "text-slate-500"
-                    : "text-amber-600"
+                    ? "text-zinc-400"
+                    : "text-zinc-900"
               )}>
                 {skill.name}
               </h4>
@@ -93,7 +93,7 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
             {/* SPINE */}
             <div className={cn(
               "w-px h-8 transition-colors duration-500 mt-3", 
-              isComplete ? "bg-amber-500/30" : isLocked ? "bg-slate-800" : "bg-amber-900/30"
+              isComplete ? "bg-zinc-900" : isLocked ? "bg-zinc-200" : "bg-zinc-200"
             )}></div>
 
             {/* DYNAMIC CONTENT AREA: Either Missing Prerequisites OR Sub-skills */}
@@ -101,7 +101,7 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
               {/* Center Line Background */}
               <div className={cn(
                 "absolute left-1/2 -translate-x-1/2 top-0 bottom-6 w-px transition-colors duration-500 z-0", 
-                isComplete ? "bg-amber-500/20" : isLocked ? "bg-slate-800/50" : "bg-amber-900/20"
+                isComplete ? "bg-zinc-900" : isLocked ? "bg-zinc-200 border-dashed" : "bg-zinc-200"
               )}></div>
 
               <AnimatePresence mode="wait">
@@ -113,14 +113,14 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
                     exit={{ opacity: 0, y: -10 }}
                     className="relative z-10 w-full flex flex-col items-center mt-2"
                   >
-                    <span className="text-[9px] font-bold text-red-500/70 uppercase tracking-widest mb-3 bg-[#0B1120] px-2 py-0.5 rounded-full border border-red-900/30">
-                      Unlock Requirements
+                    <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-3 bg-white px-3 py-1 rounded-full border border-zinc-200">
+                      Syarat Terkunci
                     </span>
                     <div className="flex flex-col gap-2 w-full px-4">
                       {missingPrereqs.map((req, i) => (
-                        <div key={i} className="flex items-center justify-between bg-slate-900/80 border border-slate-800 py-2 px-3 rounded-lg shadow-inner">
-                          <span className="text-xs font-semibold text-slate-400 truncate">{req}</span>
-                          <Lock className="w-3 h-3 text-slate-600 flex-shrink-0" />
+                        <div key={i} className="flex items-center justify-between bg-zinc-50 border border-zinc-200 py-2 px-3 rounded-lg shadow-sm">
+                          <span className="text-xs font-bold text-zinc-500 truncate">{req}</span>
+                          <Lock className="w-3 h-3 text-zinc-300 flex-shrink-0" />
                         </div>
                       ))}
                     </div>
@@ -144,25 +144,25 @@ export function GoldenSkills({ skills, ownedSubSkills, toggleSubSkill }: GoldenS
                               whileTap={{ scale: 0.95 }}
                               onClick={() => toggleSubSkill(sub)}
                               className={cn(
-                                "w-10 h-10 rotate-45 flex items-center justify-center border transition-all duration-300 cursor-pointer shadow-lg backdrop-blur-sm",
+                                "w-10 h-10 rotate-45 flex items-center justify-center border transition-all duration-300 cursor-pointer shadow-sm bg-white",
                                 isSubOwned 
-                                  ? "bg-amber-500/20 border-amber-400/50 z-20" 
-                                  : "bg-[#0f172a]/90 border-slate-700/50 hover:bg-slate-800/80 hover:border-amber-700/50 z-10"
+                                  ? "border-zinc-900 bg-zinc-900 z-20" 
+                                  : "border-zinc-200 hover:border-zinc-400 z-10"
                               )}
                             >
                               {isSubOwned ? (
                                 <motion.div className="-rotate-45" initial={{ scale: 0 }} animate={{ scale: 1 }}>
-                                  <Unlock className="w-4 h-4 text-amber-400" />
+                                  <Unlock className="w-4 h-4 text-white" />
                                 </motion.div>
                               ) : null}
                             </motion.button>
                             
                             <div className="absolute left-[3.5rem] top-1/2 -translate-y-1/2 w-32 text-left pointer-events-none z-20">
                                <span className={cn(
-                                 "text-xs font-semibold leading-tight block transition-all duration-300",
+                                 "text-xs font-bold leading-tight block transition-all duration-300",
                                  isSubOwned 
-                                   ? "text-amber-300 drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]" 
-                                   : "text-slate-500 group-hover:text-amber-600/80 group-hover:translate-x-1"
+                                   ? "text-zinc-900" 
+                                   : "text-zinc-400 group-hover:text-zinc-600 group-hover:translate-x-1"
                                )}>
                                  {sub}
                                </span>

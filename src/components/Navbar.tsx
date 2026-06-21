@@ -29,7 +29,6 @@ export default function Navbar() {
       </Link>
       
       <div className="hidden md:flex gap-8 text-sm font-medium text-zinc-500">
-        <a href="#features" className="hover:text-zinc-900 transition-colors">Fitur Kami</a>
         <Link to="/kalkulator" className="hover:text-zinc-900 transition-colors font-semibold">Kalkulator Inflasi</Link>
         <Link to="/market-value" className="hover:text-zinc-900 transition-colors font-semibold">Skill Benchmark</Link>
       </div>

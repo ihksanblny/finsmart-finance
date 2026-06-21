@@ -3,6 +3,7 @@ import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Ledger from './pages/Ledger';
 import RealIncome from './pages/RealIncome';
 import MarketValue from './pages/MarketValue';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -19,6 +20,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/ledger" 
+          element={
+            <ProtectedRoute>
+              <Ledger />
             </ProtectedRoute>
           } 
         />
