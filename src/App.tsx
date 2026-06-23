@@ -8,6 +8,7 @@ import RealIncome from './pages/RealIncome';
 import MarketValue from './pages/MarketValue';
 import Goals from './pages/Goals';
 import Onboarding from './pages/Onboarding';
+import Market from './pages/Market';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -48,6 +49,10 @@ function App() {
         <Route 
           path="/market-value" 
           element={<MarketValue />} 
+        />
+        <Route 
+          path="/market" 
+          element={<Market />} 
         />
         <Route 
           path="/goals" 

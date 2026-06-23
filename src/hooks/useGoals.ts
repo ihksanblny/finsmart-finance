@@ -27,6 +27,8 @@ export function useGoals() {
   // Fund Modal State
   const [fundingGoal, setFundingGoal] = useState<Goal | null>(null);
   const [fundAmount, setFundAmount] = useState('');
+  const [fundError, setFundError] = useState('');
+  const [fundSuccess, setFundSuccess] = useState('');
 
   useEffect(() => {
     fetchGoals();
@@ -90,22 +92,75 @@ export function useGoals() {
     if (isNaN(amountToAdd) || amountToAdd <= 0) return;
 
     try {
-      const newAmount = fundingGoal.current_amount + amountToAdd;
-      // Cap at target
-      const finalAmount = newAmount > fundingGoal.target_amount ? fundingGoal.target_amount : newAmount;
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-      const { error } = await supabase
+      // 1. Calculate Active Balance
+      const { data: txData, error: txError } = await supabase
+        .from('transactions')
+        .select('type, amount')
+        .eq('user_id', user.id);
+      
+      if (txError) throw txError;
+
+      let totalBalance = 0;
+      if (txData) {
+         totalBalance = txData.reduce((acc, curr) => {
+           return curr.type === 'income' ? acc + curr.amount : acc - curr.amount;
+         }, 0);
+      }
+
+      // Calculate the actual amount that will be added (capped at target)
+      const newAmount = fundingGoal.current_amount + amountToAdd;
+      const finalAmount = newAmount > fundingGoal.target_amount ? fundingGoal.target_amount : newAmount;
+      const actualAmountAdded = finalAmount - fundingGoal.current_amount;
+
+      if (actualAmountAdded <= 0) {
+        setFundError('Target tabungan sudah terpenuhi sebelumnya.');
+        return;
+      }
+
+      // 2. Strict Validation Gate
+      if (actualAmountAdded > totalBalance) {
+         setFundError(`Saldo kas tidak cukup! Saldo Anda: Rp ${totalBalance.toLocaleString('id-ID')}`);
+         return;
+      }
+
+      // 3. Action 1: Update Goal
+      const { error: updateError } = await supabase
         .from('financial_goals')
         .update({ current_amount: finalAmount })
         .eq('id', fundingGoal.id);
 
-      if (error) throw error;
+      if (updateError) throw updateError;
+
+      // 4. Action 2: Insert Expense Transaction
+      const { error: insertError } = await supabase
+        .from('transactions')
+        .insert({
+           user_id: user.id,
+           type: 'expense',
+           category: 'Investasi',
+           amount: actualAmountAdded,
+           description: `Transfer ke Goal: ${fundingGoal.name}`,
+           date: new Date().toISOString()
+        });
+
+      if (insertError) throw insertError;
       
-      setFundingGoal(null);
-      setFundAmount('');
+      setFundSuccess(`Berhasil memindahkan Rp ${actualAmountAdded.toLocaleString('id-ID')} ke target tabungan!`);
       fetchGoals();
+      
+      // Auto close modal after success
+      setTimeout(() => {
+         setFundingGoal(null);
+         setFundAmount('');
+         setFundSuccess('');
+      }, 2000);
+
     } catch (error) {
       console.error('Error funding goal:', error);
+      setFundError('Terjadi kesalahan sistem saat memproses transaksi.');
     }
   };
 
@@ -135,6 +190,10 @@ export function useGoals() {
     setFundingGoal,
     fundAmount,
     setFundAmount,
+    fundError,
+    setFundError,
+    fundSuccess,
+    setFundSuccess,
     handleCreateGoal,
     handleAddFund,
     handleDeleteGoal

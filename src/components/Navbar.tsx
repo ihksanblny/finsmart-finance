@@ -31,6 +31,7 @@ export default function Navbar() {
       <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 items-center gap-8 text-sm font-medium text-zinc-500">
         <Link to="/kalkulator" className="hover:text-zinc-900 transition-colors font-semibold">Kalkulator Inflasi</Link>
         <Link to="/market-value" className="hover:text-zinc-900 transition-colors font-semibold">Skill Benchmark</Link>
+        <Link to="/market" className="hover:text-zinc-900 transition-colors font-semibold">Kurs Dollar</Link>
       </div>
       
       <div className="flex items-center gap-4 text-sm font-bold">

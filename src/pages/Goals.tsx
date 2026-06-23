@@ -36,6 +36,10 @@ export default function Goals() {
     setFundingGoal,
     fundAmount,
     setFundAmount,
+    fundError,
+    setFundError,
+    fundSuccess,
+    setFundSuccess,
     handleCreateGoal,
     handleAddFund,
     handleDeleteGoal
@@ -223,7 +227,7 @@ export default function Goals() {
             className="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl relative"
           >
             <button 
-              onClick={() => { setFundingGoal(null); setFundAmount(''); }}
+              onClick={() => { setFundingGoal(null); setFundAmount(''); setFundError(''); setFundSuccess(''); }}
               className="absolute top-6 right-6 text-zinc-400 hover:text-zinc-900"
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -233,11 +237,25 @@ export default function Goals() {
               {renderIcon(fundingGoal.icon, "w-6 h-6")}
             </div>
             <h3 className="text-2xl font-black text-zinc-900 tracking-tight mb-2">Fund '{fundingGoal.name}'</h3>
-            <p className="text-sm font-bold text-zinc-500 mb-8">
+            <p className="text-sm font-bold text-zinc-500 mb-6">
               Target: Rp {fundingGoal.target_amount.toLocaleString('id-ID')} <br/>
               Current: Rp {fundingGoal.current_amount.toLocaleString('id-ID')} <br/>
               Remaining: <span className="text-emerald-600">Rp {(fundingGoal.target_amount - fundingGoal.current_amount).toLocaleString('id-ID')}</span>
             </p>
+
+            {fundError && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-semibold flex items-start gap-3">
+                <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                {fundError}
+              </div>
+            )}
+
+            {fundSuccess && (
+              <div className="mb-6 p-4 bg-emerald-50 border border-emerald-100 text-emerald-600 rounded-xl text-sm font-semibold flex items-start gap-3">
+                <svg className="w-5 h-5 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                {fundSuccess}
+              </div>
+            )}
 
             <form onSubmit={handleAddFund}>
               <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Amount to Add (Rp)</label>
@@ -248,13 +266,19 @@ export default function Goals() {
                 placeholder="e.g. 500,000"
                 value={fundAmount}
                 onChange={(e) => {
+                  setFundError(''); // Clear error when typing
                   const val = e.target.value.replace(/\D/g, '');
                   setFundAmount(val ? parseInt(val).toLocaleString('id-ID') : '');
                 }}
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-4 text-xl font-black text-zinc-900 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 transition-all mb-6 text-center"
+                disabled={!!fundSuccess}
+                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-4 text-xl font-black text-zinc-900 focus:outline-none focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 transition-all mb-6 text-center disabled:opacity-50"
               />
-              <button type="submit" className="w-full bg-zinc-900 text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-zinc-800 transition-all">
-                Confirm Transfer
+              <button 
+                type="submit" 
+                disabled={!!fundSuccess}
+                className="w-full bg-zinc-900 text-white py-4 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-zinc-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {fundSuccess ? 'Success!' : 'Confirm Transfer'}
               </button>
             </form>
           </motion.div>
