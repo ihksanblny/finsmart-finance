@@ -1,6 +1,10 @@
 import DashboardNav from '../components/DashboardNav';
 import StatWidgets from '../components/dashboard/StatWidgets';
+import TopGoalsWidget from '../components/dashboard/TopGoalsWidget';
+import RecentLedgerWidget from '../components/dashboard/RecentLedgerWidget';
+import ExpenseChartWidget from '../components/dashboard/ExpenseChartWidget';
 import { useDashboardData } from '../hooks/useDashboardData';
+import { useAiInsight } from '../hooks/useAiInsight';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { supabase } from '../lib/supabase';
@@ -11,7 +15,10 @@ export default function Dashboard() {
     monthIncome,
     monthExpense,
     dayaBeliStatus,
-    profile
+    profile,
+    transactions,
+    recentTransactions,
+    activeGoals
   } = useDashboardData();
   const navigate = useNavigate();
 
@@ -27,6 +34,8 @@ export default function Dashboard() {
       }
     });
   }, [navigate]);
+
+  const aiInsight = useAiInsight(monthIncome, monthExpense, activeGoals);
 
   return (
     <div className="min-h-screen bg-zinc-50 text-zinc-900 font-sans selection:bg-zinc-200 flex">
@@ -57,111 +66,57 @@ export default function Dashboard() {
                 dayaBeliStatus={dayaBeliStatus}
               />
 
-              {/* AI Insight Alert: Executive Summary Style */}
-              {dayaBeliStatus && (monthExpense > 0 || monthIncome > 0) && (
-                <div className={`p-6 lg:p-8 border rounded-2xl flex flex-col lg:flex-row items-start lg:items-center gap-6 shadow-sm transition-all ${
-                  (monthIncome - monthExpense < 0) 
-                    ? 'bg-zinc-50 border-zinc-200 text-zinc-900' 
-                    : dayaBeliStatus.remainingReal < 0 
-                      ? 'bg-zinc-50 border-zinc-200 text-zinc-900'
-                      : 'bg-white border-zinc-200'
+              {/* AI Insight Alert: Cross Analytics System */}
+              <div className={`p-6 lg:p-8 border rounded-2xl flex flex-col lg:flex-row items-start lg:items-center gap-6 shadow-sm transition-all ${
+                aiInsight.type === 'danger' ? 'bg-zinc-50 border-zinc-300 text-zinc-900' : 
+                aiInsight.type === 'success' ? 'bg-white border-zinc-200' : 'bg-zinc-50 border-zinc-200'
+              }`}>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border ${
+                  aiInsight.type === 'danger' ? 'bg-zinc-900 border-zinc-800 text-white' : 
+                  aiInsight.type === 'success' ? 'bg-zinc-100 border-zinc-200 text-zinc-900' : 
+                  'bg-white border-zinc-200 text-zinc-500'
                 }`}>
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border ${
-                    (monthIncome - monthExpense < 0) ? 'bg-zinc-900 border-zinc-800 text-white' : dayaBeliStatus.remainingReal < 0 ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-zinc-50 border-zinc-100 text-zinc-600'
-                  }`}>
-                     {(monthIncome - monthExpense < 0) ? (
-                       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                       </svg>
-                     ) : (
-                       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                       </svg>
-                     )}
-                  </div>
-                  <div className="w-full">
-                    <h3 className={`text-xs font-semibold uppercase tracking-wider mb-2 text-zinc-500`}>
-                      Executive Summary
-                    </h3>
-                    
-                    <div className="text-sm leading-relaxed text-zinc-700">
-                      {(monthIncome - monthExpense < 0) ? (
-                        <>
-                          <p className="mb-2">
-                            Pemasukan bulan ini baru <strong className="font-bold">Rp {monthIncome.toLocaleString('id-ID')}</strong>, 
-                            tapi pengeluaran sudah mencapai <strong className="font-bold">Rp {monthExpense.toLocaleString('id-ID')}</strong>. 
-                            Kamu sedang <span className="font-semibold px-2 py-0.5 rounded bg-zinc-900 text-white ml-1">Minus Rp {(monthExpense - monthIncome).toLocaleString('id-ID')}</span>
-                          </p>
-                          <p className="text-xs font-medium text-zinc-500 pt-3 border-t border-zinc-200 mt-3">
-                            Tindakan diperlukan: Segera evaluasi pengeluaran Anda.
-                          </p>
-                        </>
-                      ) : (
-                        <>
-                          Target pendapatan riil bulanan dinilai sebesar <strong className="font-bold">Rp {dayaBeliStatus.realSalary.toLocaleString('id-ID', { maximumFractionDigits: 0 })}</strong>. 
-                          {monthIncome > dayaBeliStatus.realSalary ? (
-                            <span> Pemasukan bulan ini <strong className="font-bold text-zinc-900">Rp {monthIncome.toLocaleString('id-ID')}</strong>, menambal batas inflasi. </span>
-                          ) : monthIncome > 0 ? (
-                            <span> Pemasukan yang tercatat adalah <strong className="font-bold">Rp {monthIncome.toLocaleString('id-ID')}</strong>. </span>
-                          ) : (
-                            <span> Belum ada pencatatan pemasukan dompet bulan ini. </span>
-                          )}
-                          
-                          {monthExpense > 0 && (
-                            <span className="block mt-3 pt-3 border-t border-zinc-100">
-                              Total pengeluaran <strong className="font-bold">Rp {monthExpense.toLocaleString('id-ID')}</strong>. 
-                              Kapasitas inflasi tersisa <strong className={`font-semibold px-2 py-0.5 rounded ml-1 ${dayaBeliStatus.remainingReal < 0 ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-900'}`}>
-                                Rp {dayaBeliStatus.remainingReal.toLocaleString('id-ID', { maximumFractionDigits: 0 })}
-                              </strong>. 
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </div>
+                   {aiInsight.type === 'danger' ? (
+                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                     </svg>
+                   ) : aiInsight.type === 'warning' ? (
+                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                     </svg>
+                   ) : (
+                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                     </svg>
+                   )}
                 </div>
-              )}
-
-              {/* BIG ANALYTICS CHART PLACEHOLDER */}
-              <div className="bg-white border border-zinc-200 rounded-2xl p-8 shadow-sm flex flex-col h-[400px]">
-                <div className="flex justify-between items-end mb-8">
-                  <div>
-                    <h3 className="text-lg font-bold text-zinc-900">Cashflow Analytics</h3>
-                    <p className="text-sm text-zinc-500 mt-1">Inflow vs Outflow History</p>
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-zinc-900"></div>
-                      <span className="text-xs font-medium text-zinc-600">Inflow</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-zinc-200"></div>
-                      <span className="text-xs font-medium text-zinc-600">Outflow</span>
-                    </div>
+                <div className="w-full">
+                  <h3 className="text-xs font-bold uppercase tracking-widest mb-2 text-zinc-500">
+                    AI Cross-Analytics Insight
+                  </h3>
+                  
+                  <div className="text-sm leading-relaxed text-zinc-800 font-medium">
+                    <p>{aiInsight.message}</p>
                   </div>
                 </div>
                 
-                <div className="flex-1 border-t border-b border-zinc-100 flex items-end justify-between py-8 px-2 gap-2">
-                  {/* Simulated Bar Chart */}
-                  {[...Array(7)].map((_, i) => {
-                    const h1 = Math.floor(Math.random() * 60) + 20;
-                    const h2 = Math.floor(Math.random() * 50) + 10;
-                    return (
-                      <div key={i} className="w-full flex flex-col items-center justify-end gap-1 h-full group">
-                        <div className="w-full max-w-[2rem] flex justify-center items-end gap-1 h-full">
-                          <div className="w-full bg-zinc-900 rounded-t-md transition-all duration-300 opacity-90 hover:opacity-100" style={{ height: `${h1}%` }}></div>
-                          <div className="w-full bg-zinc-200 rounded-t-md transition-all duration-300 hover:bg-zinc-300" style={{ height: `${h2}%` }}></div>
-                        </div>
-                        <span className="text-[10px] font-medium text-zinc-400 mt-3">D-{6-i}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                <Link to={aiInsight.actionLink} className="shrink-0 w-full lg:w-auto px-5 py-3 mt-4 lg:mt-0 bg-zinc-900 text-white text-xs font-bold uppercase tracking-wider rounded-xl hover:bg-zinc-800 transition-colors text-center">
+                  {aiInsight.actionText}
+                </Link>
               </div>
+
+              {/* EXPENSE ANALYTICS CHART */}
+              <ExpenseChartWidget transactions={transactions} />
+
+              {/* RECENT LEDGER WIDGET */}
+              <RecentLedgerWidget transactions={recentTransactions} />
             </div>
 
             {/* RIGHT ZONE: Info Modules (4 Cols) */}
             <div className="xl:col-span-4 flex flex-col gap-6 xl:pt-[104px]">
+              {/* TOP GOALS WIDGET */}
+              <TopGoalsWidget goals={activeGoals} />
+              
               {/* MINI INFLATION CALCULATOR */}
               <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
                  <div className="flex justify-between items-start mb-4">

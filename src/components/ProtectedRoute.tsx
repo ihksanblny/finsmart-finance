@@ -28,9 +28,9 @@ export default function ProtectedRoute({ children }: { children: ReactNode }) {
   // Jika sedang mengecek token, tampilkan layar loading
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0e2917] flex flex-col items-center justify-center text-white gap-4">
-        <div className="w-8 h-8 border-4 border-[#b5f164] border-t-transparent rounded-full animate-spin"></div>
-        <div className="text-sm font-medium text-emerald-50/70">Memverifikasi akses...</div>
+      <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center text-zinc-900 gap-4">
+        <div className="w-8 h-8 border-4 border-zinc-200 border-t-zinc-900 rounded-full animate-spin"></div>
+        <div className="text-sm font-medium text-zinc-500">Memverifikasi akses...</div>
       </div>
     );
   }

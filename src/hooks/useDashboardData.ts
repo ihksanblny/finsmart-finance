@@ -14,6 +14,7 @@ export function useDashboardData() {
   const [userId, setUserId] = useState<string | null>(null);
   const [profile, setProfile] = useState<{current_profession?: string, current_salary: number, last_year_salary: number} | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [activeGoals, setActiveGoals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Kurs & Inflasi State
@@ -72,6 +73,18 @@ export function useDashboardData() {
         
       if (error) throw error;
       setTransactions((data as Transaction[]) || []);
+      
+      // Fetch Goals
+      const { data: goalsData, error: goalsError } = await supabase
+        .from('financial_goals')
+        .select('*')
+        .eq('user_id', uid)
+        .order('created_at', { ascending: false })
+        .limit(2);
+        
+      if (!goalsError && goalsData) {
+        setActiveGoals(goalsData);
+      }
       
       // Fetch Profile
       const { data: profileData } = await supabase
@@ -187,6 +200,8 @@ export function useDashboardData() {
 
   return {
     transactions,
+    recentTransactions: transactions.slice(0, 5),
+    activeGoals,
     loading,
     exchangeRate,
     exchangeRateDate,
